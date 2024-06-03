@@ -1,7 +1,7 @@
 package com.example.inqool_task.service;
 
 import com.example.inqool_task.data.model.CourtSurface;
-import com.example.inqool_task.repository.CrudRepositoryInterface;
+import com.example.inqool_task.repository.CrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,15 +9,15 @@ import java.util.List;
 
 @Service
 public class CourtSurfaceService {
-    private final CrudRepositoryInterface<CourtSurface> surfaceRepository;
+    private final CrudRepository surfaceRepository;
 
     @Autowired
-    public CourtSurfaceService(CrudRepositoryInterface<CourtSurface> surfaceRepository) {
+    public CourtSurfaceService(CrudRepository surfaceRepository) {
         this.surfaceRepository = surfaceRepository;
     }
 
     public CourtSurface create(CourtSurface surface) {
-        CourtSurface createdSurface = surfaceRepository.save(surface);
+        CourtSurface createdSurface = surfaceRepository.create(surface);
 
         if (createdSurface == null) {
             System.out.println("FAIL CREATE SURFACE");

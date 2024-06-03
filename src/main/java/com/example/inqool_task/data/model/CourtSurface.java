@@ -20,12 +20,12 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "COURT_SURFACES")
 public class CourtSurface {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "user_id")
+    @Column(name = "surface_id")
     private Long id;
 
     @Column(name = "surface", nullable = false, unique = true)
@@ -54,7 +54,7 @@ public class CourtSurface {
                 "id=" + id +
                 ", surface='" + surface + '\'' +
                 ", pricePerMinute=" + pricePerMinute +
-                ", courts=" + courts.stream().map(c -> " " + c.getId()) +
+                ", courts=" + (courts == null ? "null" : courts.stream().map(c -> " " + c.getId())) +
                 '}';
     }
 
