@@ -1,6 +1,8 @@
 package com.example.inqool_task.service;
 
 import com.example.inqool_task.data.model.CourtSurface;
+//import com.example.inqool_task.exceptions.EntityNotFoundException;
+import com.example.inqool_task.exceptions.EntityNotFoundException;
 import com.example.inqool_task.repository.CrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,15 +12,15 @@ import java.util.List;
 
 @Service
 public class CourtSurfaceService {
-    private final CrudRepository surfaceRepository;
+    private final CrudRepository crudRepository;
 
     @Autowired
-    public CourtSurfaceService(CrudRepository surfaceRepository) {
-        this.surfaceRepository = surfaceRepository;
+    public CourtSurfaceService(CrudRepository crudRepository) {
+        this.crudRepository = crudRepository;
     }
 
     public CourtSurface create(CourtSurface surface) {
-        List<CourtSurface> surfaces = surfaceRepository.findByNamedQuery(
+        List<CourtSurface> surfaces = crudRepository.findByNamedQuery(
                 CourtSurface.FIND_BY_SURFACE, CourtSurface.class,
                 Collections.singletonMap("surface", surface.getSurface())
         );
@@ -26,7 +28,7 @@ public class CourtSurfaceService {
             throw new IllegalArgumentException("Surface already exists");
         }
 
-        CourtSurface createdSurface = surfaceRepository.create(surface);
+        CourtSurface createdSurface = crudRepository.create(surface);
 
         if (createdSurface == null) {
             System.out.println("FAIL CREATE SURFACE");
@@ -39,15 +41,19 @@ public class CourtSurfaceService {
         if (id == null) {
             throw new IllegalArgumentException("Provided id must not be null");
         }
-        return surfaceRepository.getById(id, CourtSurface.class);
+        CourtSurface surface = crudRepository.getById(id, CourtSurface.class);
+        if (surface == null) {
+            throw new EntityNotFoundException("Court surface", id);
+        }
+        return surface;
     }
 
     public List<CourtSurface> getAll() {
-        return surfaceRepository.findByNamedQuery(CourtSurface.FIND_ALL_QUERY, CourtSurface.class, null);
+        return crudRepository.findByNamedQuery(CourtSurface.FIND_ALL_QUERY, CourtSurface.class, null);
     }
 
     public CourtSurface update(CourtSurface surfaceToUpdate) {
-        CourtSurface updatedSurface = surfaceRepository.update(surfaceToUpdate);
+        CourtSurface updatedSurface = crudRepository.update(surfaceToUpdate);
         if (updatedSurface == null) {
             System.out.println("ERROR");
         }
