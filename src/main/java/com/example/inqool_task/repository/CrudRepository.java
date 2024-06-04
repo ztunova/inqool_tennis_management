@@ -56,6 +56,23 @@ public class CrudRepository {
         }
     }
 
+    public <R> List<R> findByNamedQuery(String queryName, Class<R> clazz) {
+        if (queryName == null || queryName.isEmpty() || clazz == null) {
+            return Collections.emptyList();
+        }
 
+        EntityManager em = Persistence.getEntityManager();
+        try {
+            TypedQuery<R> query = em.createNamedQuery(queryName, clazz);
+            return query.getResultList();
+        }
+        catch (Exception e) {
+            log.error("Could not execute query '" + queryName + "' for entity '" + clazz.getSimpleName() + "' " + "due to: " + e.getMessage(), e);
+            return Collections.emptyList();
+        }
+        finally {
+            em.close();
+        }
+    }
 
 }

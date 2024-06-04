@@ -5,6 +5,7 @@ import com.example.inqool_task.repository.CrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -34,7 +35,7 @@ public class CourtSurfaceService {
     }
 
     public List<CourtSurface> getAll() {
-        return null;
+        return surfaceRepository.findByNamedQuery(CourtSurface.FIND_ALL_QUERY, CourtSurface.class);
     }
 
     public CourtSurface update(CourtSurface updatedSurface) {

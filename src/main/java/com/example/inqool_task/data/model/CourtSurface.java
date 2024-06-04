@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -21,7 +22,10 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "COURT_SURFACES")
+@NamedQuery(name = CourtSurface.FIND_ALL_QUERY, query = "select s from CourtSurface s")
 public class CourtSurface {
+
+    public static final String FIND_ALL_QUERY = "CourtSurface.findAll";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

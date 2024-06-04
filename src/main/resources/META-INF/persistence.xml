@@ -7,7 +7,10 @@
 
     <persistence-unit name="inqool-task-pu" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>com.example.inqool_task.data.model.Court</class>
+        <class>com.example.inqool_task.data.model.CourtSurface</class>
         <class>com.example.inqool_task.data.model.Customer</class>
+        <class>com.example.inqool_task.data.model.Reservation</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
             <property name="hibernate.connection.url" value="jdbc:h2:mem:inqool-task-db" />

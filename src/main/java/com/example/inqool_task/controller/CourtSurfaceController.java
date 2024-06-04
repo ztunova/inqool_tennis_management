@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/surface",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE)
 public class CourtSurfaceController {
 
@@ -34,7 +35,12 @@ public class CourtSurfaceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CourtSurfaceDto> getSurfaceById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(surfaceFacade.getById(id), HttpStatus.CREATED);
+        return new ResponseEntity<>(surfaceFacade.getById(id), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CourtSurfaceDto>> getAllSurfaces() {
+        return new ResponseEntity<>(surfaceFacade.getAll(), HttpStatus.OK);
     }
 
 }
