@@ -40,4 +40,8 @@ public class CourtSurfaceFacade {
         return mapper.mapToDto(surfaceService.update(mapper.mapToEntity(surfaceToUpdateDto)));
     }
 
+    public void delete(Long id) {
+        surfaceService.delete(id);
+    }
+
 }

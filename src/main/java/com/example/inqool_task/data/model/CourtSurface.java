@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import java.util.Objects;
 import java.util.Set;
@@ -22,17 +23,20 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "COURT_SURFACES")
+@Where(clause = "deleted = false")
 @NamedQuery(name = CourtSurface.FIND_ALL_QUERY, query = "select s from CourtSurface s")
+@NamedQuery(name = CourtSurface.FIND_BY_SURFACE, query = "select s from CourtSurface s where s.surface = :surface")
 public class CourtSurface {
 
     public static final String FIND_ALL_QUERY = "CourtSurface.findAll";
+    public static final String FIND_BY_SURFACE = "CourtSurface.findBySurface";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "surface_id")
     private Long id;
 
-    @Column(name = "surface", nullable = false, unique = true)
+    @Column(name = "surface", nullable = false)
     private String surface;
 
     @Column(name = "minute_price")
@@ -42,6 +46,9 @@ public class CourtSurface {
             fetch = FetchType.EAGER
     )
     private Set<Court> courts;
+
+    @Column(name = "deleted")
+    private boolean deleted = false;
 
 
     public void addCourt(Court court) {

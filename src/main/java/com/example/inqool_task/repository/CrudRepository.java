@@ -79,7 +79,7 @@ public class CrudRepository {
         }
     }
 
-    public <R> List<R> findByNamedQuery(String queryName, Class<R> clazz) {
+    public <R> List<R> findByNamedQuery(String queryName, Class<R> clazz, Map<String, Object> parameters) {
         if (queryName == null || queryName.isEmpty() || clazz == null) {
             return Collections.emptyList();
         }
@@ -87,13 +87,14 @@ public class CrudRepository {
         EntityManager em = Persistence.getEntityManager();
         try {
             TypedQuery<R> query = em.createNamedQuery(queryName, clazz);
+            if (parameters != null && !parameters.isEmpty()) {
+                parameters.forEach(query::setParameter);
+            }
             return query.getResultList();
-        }
-        catch (Exception e) {
-            log.error("Could not execute query '" + queryName + "' for entity '" + clazz.getSimpleName() + "' " + "due to: " + e.getMessage(), e);
+        } catch (Exception e) {
+            log.error("Could not execute query '" + queryName + "' for entity '" + clazz.getSimpleName() + "' " + (parameters != null ? "with parameters '" + parameters.toString() + "' " : "") + "due to: " + e.getMessage(), e);
             return Collections.emptyList();
-        }
-        finally {
+        } finally {
             em.close();
         }
     }

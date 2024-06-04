@@ -18,6 +18,14 @@ public class CourtSurfaceService {
     }
 
     public CourtSurface create(CourtSurface surface) {
+        List<CourtSurface> surfaces = surfaceRepository.findByNamedQuery(
+                CourtSurface.FIND_BY_SURFACE, CourtSurface.class,
+                Collections.singletonMap("surface", surface.getSurface())
+        );
+        if (!surfaces.isEmpty()) {
+            throw new IllegalArgumentException("Surface already exists");
+        }
+
         CourtSurface createdSurface = surfaceRepository.create(surface);
 
         if (createdSurface == null) {
@@ -35,7 +43,7 @@ public class CourtSurfaceService {
     }
 
     public List<CourtSurface> getAll() {
-        return surfaceRepository.findByNamedQuery(CourtSurface.FIND_ALL_QUERY, CourtSurface.class);
+        return surfaceRepository.findByNamedQuery(CourtSurface.FIND_ALL_QUERY, CourtSurface.class, null);
     }
 
     public CourtSurface update(CourtSurface surfaceToUpdate) {
@@ -47,6 +55,8 @@ public class CourtSurfaceService {
     }
 
     public void delete(Long id) {
-        return;
+        CourtSurface surfaceToDelete = getById(id);
+        surfaceToDelete.setDeleted(true);
+        update(surfaceToDelete);
     }
 }
