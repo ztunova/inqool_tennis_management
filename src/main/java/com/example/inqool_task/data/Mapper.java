@@ -42,6 +42,14 @@ public class Mapper {
         return court;
     }
 
+    public Court mapToEntity(CourtDto courtDto) {
+        Court court = new Court();
+        court.setId(courtDto.getId());
+        court.setCourtNumber(courtDto.getCourtNumber());
+        court.setSurface(mapToEntity(courtDto.getSurface()));
+        return court;
+    }
+
     public CourtDto mapToDto(Court court) {
         CourtDto courtDto = new CourtDto();
         courtDto.setId(court.getId());

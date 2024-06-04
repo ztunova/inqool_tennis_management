@@ -2,6 +2,7 @@ package com.example.inqool_task.service;
 
 import com.example.inqool_task.data.model.Court;
 import com.example.inqool_task.data.model.CourtSurface;
+import com.example.inqool_task.exceptions.EntityNotFoundException;
 import com.example.inqool_task.repository.CrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ public class CourtService {
 
         CourtSurface surface = surfaceService.getById(surfaceId);
         court.setSurface(surface);
-//        surface.addCourt(court);
+        surface.addCourt(court);
         Court createdCourt = crudRepository.create(court);
 
         if (createdCourt == null) {
@@ -42,5 +43,35 @@ public class CourtService {
 
         return createdCourt;
     }
+
+    public Court getById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Provided id must not be null");
+        }
+        Court court = crudRepository.getById(id, Court.class);
+        if (court == null) {
+            throw new EntityNotFoundException("Court", id);
+        }
+        return court;
+    }
+
+    public List<Court> getAll() {
+        return crudRepository.findByNamedQuery(Court.FIND_ALL_QUERY, Court.class, null);
+    }
+
+    public Court update(Court courtToUpdate) {
+        surfaceService.getById(courtToUpdate.getSurface().getId());
+        Court updatedCourt = crudRepository.update(courtToUpdate);
+        if (updatedCourt == null) {
+            System.out.println("ERROR");
+        }
+        return updatedCourt;
+    }
+
+//    public void delete(Long id) {
+//        Court courtToDelete = getById(id);
+//        courtToDelete.setDeleted(true);
+//        update(courtToDelete);
+//    }
 
 }

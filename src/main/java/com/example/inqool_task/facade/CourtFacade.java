@@ -31,4 +31,21 @@ public class CourtFacade {
         return mapper.mapToDto(courtService.create(mapper.mapToEntity(newCourt), newCourt.getSurfaceId()));
     }
 
+    public CourtDto getById(Long id) {
+        return mapper.mapToDto(courtService.getById(id));
+    }
+
+    public List<CourtDto> getAll() {
+        List<Court> courts = courtService.getAll();
+        return courts.stream().map(mapper::mapToDto).toList();
+    }
+
+    public CourtDto update(CourtDto courtToUpdateDto) {
+        return mapper.mapToDto(courtService.update(mapper.mapToEntity(courtToUpdateDto)));
+    }
+
+//    public void delete(Long id) {
+//        courtService.delete(id);
+//    }
+
 }

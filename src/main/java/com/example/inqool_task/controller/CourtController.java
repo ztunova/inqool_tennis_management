@@ -34,4 +34,25 @@ public class CourtController {
         return new ResponseEntity<>(courtFacade.create(court), HttpStatus.CREATED);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CourtDto> getCourtById(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(courtFacade.getById(id), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CourtDto>> getAllCourts() {
+        return new ResponseEntity<>(courtFacade.getAll(), HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<CourtDto> updateCourt(@RequestBody CourtDto court) {
+        return new ResponseEntity<>(courtFacade.update(court), HttpStatus.OK);
+    }
+
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteSurface(@PathVariable("id") Long id) {
+//        courtFacade.delete(id);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
+
 }

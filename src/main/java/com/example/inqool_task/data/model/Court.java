@@ -24,13 +24,13 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-//@Table(name = "COURTS")
+@Table(name = "COURTS")
 //@Where(clause = "deleted = false")
-//@NamedQuery(name = Court.FIND_ALL_QUERY, query = "select c from Court c")
+@NamedQuery(name = Court.FIND_ALL_QUERY, query = "select c from Court c")
 @NamedQuery(name = Court.FIND_BY_COURT_NUMBER, query = "select c from Court c where c.courtNumber = :courtNumber")
 public class Court {
 
-//    public static final String FIND_ALL_QUERY = "Court.findAll";
+    public static final String FIND_ALL_QUERY = "Court.findAll";
     public static final String FIND_BY_COURT_NUMBER = "Court.findByCourtNumber";
 
     @Id
@@ -56,7 +56,6 @@ public class Court {
 
     public void setSurface(CourtSurface surface) {
         this.surface = surface;
-        surface.addCourt(this);
     }
 
     public void addReservation(Reservation reservation) {
