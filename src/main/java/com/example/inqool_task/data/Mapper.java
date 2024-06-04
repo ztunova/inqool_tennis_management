@@ -1,7 +1,10 @@
 package com.example.inqool_task.data;
 
+import com.example.inqool_task.data.dto.CourtDto;
 import com.example.inqool_task.data.dto.CourtSurfaceDto;
+import com.example.inqool_task.data.dto.CreateCourtDto;
 import com.example.inqool_task.data.dto.CreateSurfaceDto;
+import com.example.inqool_task.data.model.Court;
 import com.example.inqool_task.data.model.CourtSurface;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,22 @@ public class Mapper {
         surfaceDto.setSurface(surface.getSurface());
         surfaceDto.setPricePerMinute(surface.getPricePerMinute());
         return surfaceDto;
+    }
+
+//    -------------- courts
+
+    public Court mapToEntity(CreateCourtDto courtDto) {
+        Court court = new Court();
+        court.setCourtNumber(courtDto.getCourtNumber());
+        return court;
+    }
+
+    public CourtDto mapToDto(Court court) {
+        CourtDto courtDto = new CourtDto();
+        courtDto.setId(court.getId());
+        courtDto.setCourtNumber(court.getCourtNumber());
+        courtDto.setSurface(mapToDto(court.getSurface()));
+        return courtDto;
     }
 
 }
