@@ -27,7 +27,10 @@ public class CourtSurfaceService {
     }
 
     public CourtSurface getById(Long id) {
-        return null;
+        if (id == null) {
+            throw new IllegalArgumentException("Provided id must not be null");
+        }
+        return surfaceRepository.getById(id, CourtSurface.class);
     }
 
     public List<CourtSurface> getAll() {

@@ -23,4 +23,8 @@ public class CourtSurfaceFacade {
         return mapper.mapToDto(surfaceService.create(mapper.mapToEntity(newSurface)));
     }
 
+    public CourtSurfaceDto getById(Long id) {
+        return mapper.mapToDto(surfaceService.getById(id));
+    }
+
 }
