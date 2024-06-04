@@ -36,4 +36,8 @@ public class CourtSurfaceFacade {
         return surfaces.stream().map(mapper::mapToDto).toList();
     }
 
+    public CourtSurfaceDto update(CourtSurfaceDto surfaceToUpdateDto) {
+        return mapper.mapToDto(surfaceService.update(mapper.mapToEntity(surfaceToUpdateDto)));
+    }
+
 }

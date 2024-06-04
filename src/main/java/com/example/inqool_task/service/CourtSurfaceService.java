@@ -38,8 +38,12 @@ public class CourtSurfaceService {
         return surfaceRepository.findByNamedQuery(CourtSurface.FIND_ALL_QUERY, CourtSurface.class);
     }
 
-    public CourtSurface update(CourtSurface updatedSurface) {
-        return null;
+    public CourtSurface update(CourtSurface surfaceToUpdate) {
+        CourtSurface updatedSurface = surfaceRepository.update(surfaceToUpdate);
+        if (updatedSurface == null) {
+            System.out.println("ERROR");
+        }
+        return updatedSurface;
     }
 
     public void delete(Long id) {

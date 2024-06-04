@@ -15,6 +15,14 @@ public class Mapper {
         return surface;
     }
 
+    public CourtSurface mapToEntity(CourtSurfaceDto surfaceDto) {
+        CourtSurface surface = new CourtSurface();
+        surface.setId(surfaceDto.getId());
+        surface.setSurface(surfaceDto.getSurface());
+        surface.setPricePerMinute(surfaceDto.getPricePerMinute());
+        return surface;
+    }
+
     public CourtSurfaceDto mapToDto(CourtSurface surface) {
         CourtSurfaceDto surfaceDto = new CourtSurfaceDto();
         surfaceDto.setId(surface.getId());

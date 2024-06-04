@@ -56,6 +56,29 @@ public class CrudRepository {
         }
     }
 
+    public <R> R update(R entity) {
+        if (entity == null) {
+            return null;
+        }
+        EntityManager em = Persistence.getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(entity);
+            em.flush();
+            em.getTransaction().commit();
+            log.info("Entity '" + entity.getClass().getSimpleName() + "' was successfully updated.");
+            return entity;
+        } catch (Exception e) {
+            log.error("Update operation of entity '" + entity.getClass().getSimpleName() + "' has failed due to: " + e.getMessage(), e);
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
     public <R> List<R> findByNamedQuery(String queryName, Class<R> clazz) {
         if (queryName == null || queryName.isEmpty() || clazz == null) {
             return Collections.emptyList();

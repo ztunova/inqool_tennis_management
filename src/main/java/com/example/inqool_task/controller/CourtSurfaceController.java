@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,6 +42,11 @@ public class CourtSurfaceController {
     @GetMapping
     public ResponseEntity<List<CourtSurfaceDto>> getAllSurfaces() {
         return new ResponseEntity<>(surfaceFacade.getAll(), HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<CourtSurfaceDto> updateSurface(@RequestBody CourtSurfaceDto surface) {
+        return new ResponseEntity<>(surfaceFacade.update(surface), HttpStatus.OK);
     }
 
 }
