@@ -63,7 +63,9 @@ public class CourtService {
     }
 
     public Court update(Court courtToUpdate) {
-        surfaceService.getById(courtToUpdate.getSurface().getId());
+        if (courtToUpdate.getSurface() != null) {
+            surfaceService.getById(courtToUpdate.getSurface().getId());
+        }
         Court updatedCourt = crudRepository.update(courtToUpdate);
         if (updatedCourt == null) {
             System.out.println("ERROR");
