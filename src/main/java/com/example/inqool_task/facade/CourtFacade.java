@@ -44,8 +44,8 @@ public class CourtFacade {
         return mapper.mapToDto(courtService.update(mapper.mapToEntity(courtToUpdateDto)));
     }
 
-//    public void delete(Long id) {
-//        courtService.delete(id);
-//    }
+    public void delete(Long id) {
+        courtService.delete(id);
+    }
 
 }

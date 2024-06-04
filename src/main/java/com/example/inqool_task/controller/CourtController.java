@@ -49,10 +49,10 @@ public class CourtController {
         return new ResponseEntity<>(courtFacade.update(court), HttpStatus.OK);
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> deleteSurface(@PathVariable("id") Long id) {
-//        courtFacade.delete(id);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSurface(@PathVariable("id") Long id) {
+        courtFacade.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
 }

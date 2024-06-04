@@ -45,11 +45,14 @@ public class CourtSurfaceService {
         if (id == null) {
             throw new IllegalArgumentException("Provided id must not be null");
         }
-        CourtSurface surface = crudRepository.getById(id, CourtSurface.class);
-        if (surface == null) {
+        List<CourtSurface> surfaces = crudRepository.findByNamedQuery(
+                CourtSurface.FIND_BY_ID_QUERY, CourtSurface.class,
+                Collections.singletonMap("id", id)
+        );
+        if (surfaces.isEmpty()) {
             throw new EntityNotFoundException("Court surface", id);
         }
-        return surface;
+        return surfaces.get(0);
     }
 
     public List<CourtSurface> getAll() {

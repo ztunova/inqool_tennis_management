@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Loader;
 import org.hibernate.annotations.Where;
 
 import java.util.Objects;
@@ -26,12 +27,14 @@ import java.util.Set;
 @Entity
 @Table(name = "COURTS")
 //@Where(clause = "deleted = false")
-@NamedQuery(name = Court.FIND_ALL_QUERY, query = "select c from Court c")
-@NamedQuery(name = Court.FIND_BY_COURT_NUMBER, query = "select c from Court c where c.courtNumber = :courtNumber")
+@NamedQuery(name = Court.FIND_ALL_QUERY, query = "select c from Court c where c.deleted = false")
+@NamedQuery(name = Court.FIND_BY_ID_QUERY, query = "select c from Court c where c.id = :id and c.deleted = false")
+@NamedQuery(name = Court.FIND_BY_COURT_NUMBER, query = "select c from Court c where c.courtNumber = :courtNumber and c.deleted = false")
 public class Court {
 
     public static final String FIND_ALL_QUERY = "Court.findAll";
-    public static final String FIND_BY_COURT_NUMBER = "Court.findByCourtNumber";
+    public static final String FIND_BY_ID_QUERY = "Court.findCourtById";
+    public static final String FIND_BY_COURT_NUMBER = "Court.findCourtByNumber";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -51,7 +54,7 @@ public class Court {
     )
     private Set<Reservation> reservations;
 
-//    private boolean deleted = false;
+    private boolean deleted = false;
 
 
     public void setSurface(CourtSurface surface) {

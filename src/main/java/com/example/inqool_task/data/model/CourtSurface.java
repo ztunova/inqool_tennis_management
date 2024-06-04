@@ -14,6 +14,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Loader;
 import org.hibernate.annotations.Where;
 
 import java.util.Objects;
@@ -24,12 +25,13 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "COURT_SURFACES")
-@Where(clause = "deleted = false")
-@NamedQuery(name = CourtSurface.FIND_ALL_QUERY, query = "select s from CourtSurface s")
+@NamedQuery(name = CourtSurface.FIND_ALL_QUERY, query = "select s from CourtSurface s where s.deleted = false")
+@NamedQuery(name = CourtSurface.FIND_BY_ID_QUERY, query = "select s from CourtSurface s where s.id = :id and s.deleted = false")
 @NamedQuery(name = CourtSurface.FIND_BY_SURFACE, query = "select s from CourtSurface s where s.surface = :surface")
 public class CourtSurface {
 
     public static final String FIND_ALL_QUERY = "CourtSurface.findAll";
+    public static final String FIND_BY_ID_QUERY = "CourtSurface.findSurfaceById";
     public static final String FIND_BY_SURFACE = "CourtSurface.findBySurface";
 
     @Id

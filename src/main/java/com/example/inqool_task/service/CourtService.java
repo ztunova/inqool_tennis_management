@@ -48,15 +48,18 @@ public class CourtService {
         if (id == null) {
             throw new IllegalArgumentException("Provided id must not be null");
         }
-        Court court = crudRepository.getById(id, Court.class);
-        if (court == null) {
+        List<Court> courts = crudRepository.findByNamedQuery(
+                Court.FIND_BY_ID_QUERY, Court.class,
+                Collections.singletonMap("id", id)
+        );
+        if (courts.isEmpty()) {
             throw new EntityNotFoundException("Court", id);
         }
-        return court;
+        return courts.get(0);
     }
 
     public List<Court> getAll() {
-        return crudRepository.findByNamedQuery(Court.FIND_ALL_QUERY, Court.class, null);
+         return crudRepository.findByNamedQuery(Court.FIND_ALL_QUERY, Court.class, null);
     }
 
     public Court update(Court courtToUpdate) {
@@ -68,10 +71,13 @@ public class CourtService {
         return updatedCourt;
     }
 
-//    public void delete(Long id) {
-//        Court courtToDelete = getById(id);
-//        courtToDelete.setDeleted(true);
-//        update(courtToDelete);
-//    }
+    public void delete(Long id) {
+        Court courtToDelete = getById(id);
+        if (courtToDelete == null) {
+            throw new EntityNotFoundException("Court", id);
+        }
+        courtToDelete.setDeleted(true);
+        update(courtToDelete);
+    }
 
 }
