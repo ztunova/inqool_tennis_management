@@ -27,6 +27,10 @@ public class Mapper {
     }
 
     public CourtSurfaceDto mapToDto(CourtSurface surface) {
+        if (surface == null) {
+            return null;
+        }
+
         CourtSurfaceDto surfaceDto = new CourtSurfaceDto();
         surfaceDto.setId(surface.getId());
         surfaceDto.setSurface(surface.getSurface());

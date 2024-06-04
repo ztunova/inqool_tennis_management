@@ -1,6 +1,7 @@
 package com.example.inqool_task.data.model;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -43,7 +44,8 @@ public class CourtSurface {
     private double pricePerMinute;
 
     @OneToMany(mappedBy = "surface",
-            fetch = FetchType.EAGER
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.MERGE}
     )
     private Set<Court> courts;
 
