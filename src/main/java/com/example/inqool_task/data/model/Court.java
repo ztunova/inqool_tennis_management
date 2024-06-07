@@ -18,6 +18,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Loader;
 import org.hibernate.annotations.Where;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -52,7 +53,7 @@ public class Court {
             fetch = FetchType.EAGER,
             cascade = {CascadeType.MERGE}
     )
-    private Set<Reservation> reservations;
+    private Set<Reservation> reservations = new HashSet<>();
 
     private boolean deleted = false;
 

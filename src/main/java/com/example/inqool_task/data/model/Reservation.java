@@ -9,6 +9,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PostLoad;
+import jakarta.persistence.PostPersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.Getter;
@@ -29,13 +31,13 @@ public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "user_id")
+    @Column(name = "reservation_id")
     private Long id;
 
-    @Column(name = "start", nullable = false)
+    @Column(name = "reservation_start", nullable = false)
     private LocalDateTime reservationStart;
 
-    @Column(name = "end", nullable = false)
+    @Column(name = "reservation_end", nullable = false)
     private LocalDateTime reservationEnd;
 
     @Enumerated(EnumType.STRING)
@@ -47,17 +49,21 @@ public class Reservation {
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name="court_id", nullable = false)
+    @JoinColumn(name="court_id")
     private Court court;
+
+    private boolean deleted = false;
 
     @Transient
     private double totalPrice;
 
 
-    public double calculateTotalPrice() {
+//    @PostLoad
+//    @PostPersist
+    public void calculateTotalPrice() {
         long diff = ChronoUnit.MINUTES.between(reservationStart, reservationEnd);
         double rentalPrice = diff * this.court.getSurface().getPricePerMinute();
-        return rentalPrice * gameType.getCharge();
+        this.totalPrice = rentalPrice * gameType.getCharge();
     }
 
 

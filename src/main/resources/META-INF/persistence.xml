@@ -13,7 +13,7 @@
         <class>com.example.inqool_task.data.model.Reservation</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
-            <property name="hibernate.connection.url" value="jdbc:h2:mem:inqool-task-db" />
+            <property name="hibernate.connection.url" value="jdbc:h2:mem:inqool-task-db;DB_CLOSE_DELAY=-1" />
             <property name="hibernate.connection.driver_class" value="org.h2.Driver" />
 <!--            <property name="hibernate.hbm2ddl.auto" value="create-drop" />-->
             <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>

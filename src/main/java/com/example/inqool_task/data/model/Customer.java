@@ -6,12 +6,14 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,7 +22,10 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table
+@NamedQuery(name = Customer.FIND_BY_PHONE_NUMBER, query = "select c from Customer c where c.phoneNumber = :phoneNumber")
 public class Customer {
+    public static final String FIND_BY_PHONE_NUMBER = "Customer.findByPhoneNumber";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "user_id")
@@ -35,7 +40,7 @@ public class Customer {
     @OneToMany(mappedBy = "customer",
             fetch = FetchType.EAGER
     )
-    private Set<Reservation> reservations;
+    private Set<Reservation> reservations = new HashSet<>();
 
 
     public void addReservation(Reservation reservation) {
@@ -53,7 +58,7 @@ public class Customer {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", reservations=" + reservations.stream().map(r -> " " + r.getId()) +
+                ", reservations=" + (reservations == null? "null" : reservations.stream().map(r -> " " + r.getId())) +
                 '}';
     }
 
