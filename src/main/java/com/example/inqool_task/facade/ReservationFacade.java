@@ -1,11 +1,16 @@
 package com.example.inqool_task.facade;
 
 import com.example.inqool_task.data.Mapper;
+import com.example.inqool_task.data.dto.CourtDto;
 import com.example.inqool_task.data.dto.ReservationRequestDto;
 import com.example.inqool_task.data.dto.ReservationResponseDto;
+import com.example.inqool_task.data.model.Court;
+import com.example.inqool_task.data.model.Reservation;
 import com.example.inqool_task.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ReservationFacade {
@@ -22,6 +27,15 @@ public class ReservationFacade {
 
     public ReservationResponseDto create(ReservationRequestDto reservation){
         return mapper.mapToDto(reservationService.create(mapper.mapToEntity(reservation), reservation.getCourtId()));
+    }
+
+    public ReservationResponseDto getById(Long id) {
+        return mapper.mapToDto(reservationService.getById(id));
+    }
+
+    public List<ReservationResponseDto> getAll() {
+        List<Reservation> reservations = reservationService.getAll();
+        return reservations.stream().map(mapper::mapToDto).toList();
     }
 
 }

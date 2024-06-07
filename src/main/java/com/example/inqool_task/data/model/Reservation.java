@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.PostLoad;
 import jakarta.persistence.PostPersist;
 import jakarta.persistence.Table;
@@ -27,7 +28,14 @@ import java.time.temporal.ChronoUnit;
 @ToString
 @Entity
 @Table
+@NamedQuery(name = Reservation.FIND_ALL_QUERY, query = "select r from Reservation r where r.deleted = false")
+@NamedQuery(name = Reservation.FIND_BY_ID_QUERY, query = "select r from Reservation r where r.id = :id and r.deleted = false")
+//@NamedQuery(name = Court.FIND_BY_COURT_NUMBER, query = "select c from Court c where c.courtNumber = :courtNumber and c.deleted = false")
 public class Reservation {
+
+    public static final String FIND_ALL_QUERY = "Reservation.findAll";
+    public static final String FIND_BY_ID_QUERY = "Reservation.findReservationById";
+ //   public static final String FIND_BY_COURT_NUMBER = "Court.findCourtByNumber";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
