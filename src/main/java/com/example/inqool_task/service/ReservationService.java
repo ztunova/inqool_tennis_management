@@ -8,8 +8,10 @@ import com.example.inqool_task.repository.CrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ReservationService {
@@ -28,18 +30,17 @@ public class ReservationService {
     }
 
     public Reservation create(Reservation reservation, Long courtId) {
-        // TODO: validovat ze casy sa neprekryvaju s inou rezervaciou
+        checkOverlappingReservations(courtId, reservation.getReservationStart(), reservation.getReservationEnd());
+
         Customer customer = customerService.findCustomer(reservation.getCustomer());
         Court court = courtService.getById(courtId);
 
         reservation.setCustomer(customer);
         customer.addReservation(reservation);
-
         reservation.setCourt(court);
         court.addReservation(reservation);
 
         Reservation createdReservation = crudRepository.create(reservation);
-
         if (createdReservation == null) {
             System.out.println("FAIL CREATE RESERVATION");
         }
@@ -68,6 +69,13 @@ public class ReservationService {
 
     public List<Reservation> getAll() {
         return crudRepository.findByNamedQuery(Reservation.FIND_ALL_QUERY, Reservation.class, null);
+    }
+
+    private void checkOverlappingReservations(Long courtId, LocalDateTime startTime, LocalDateTime endTime) {
+        List<Long> overlappingReservationIds = crudRepository.findOverlappingReservations(courtId, startTime, endTime);
+        if (!overlappingReservationIds.isEmpty()) {
+            throw new IllegalArgumentException("Reservation overlapping with folowing reservations: " + overlappingReservationIds);
+        }
     }
 
 }
