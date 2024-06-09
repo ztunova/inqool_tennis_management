@@ -83,7 +83,15 @@ public class ReservationService {
         }
 
         Set<Reservation> courtsReservations = courtOpt.get().getReservations();
-        TreeSet<Reservation> orderedReservations = new TreeSet<>(Comparator.comparing(Reservation::getCreatedAt));
+
+        // order reservations from newest to oldest by created at field
+        Comparator<Reservation> compareByDateCreated = new Comparator<Reservation>() {
+            @Override
+            public int compare(Reservation o1, Reservation o2) {
+                return o2.getCreatedAt().compareTo(o1.getCreatedAt());
+            }
+        };
+        TreeSet<Reservation> orderedReservations = new TreeSet<>(compareByDateCreated);
         orderedReservations.addAll(courtsReservations);
         return orderedReservations.stream().toList();
     }
