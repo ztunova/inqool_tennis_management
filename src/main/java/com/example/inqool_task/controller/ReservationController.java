@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -46,6 +47,12 @@ public class ReservationController {
     public ResponseEntity<List<ReservationResponseDto>> getReservationsByCourtNumber(@PathVariable("courtNumber")
                                                                                          Long courtNumber) {
         return new ResponseEntity<>(reservationFacade.getByCourtNumber(courtNumber), HttpStatus.OK);
+    }
+
+    @GetMapping("/customers-reservations/{phoneNumber}")
+    public ResponseEntity<List<ReservationResponseDto>> getCustomersReservations(
+            @PathVariable("phoneNumber") String phoneNumber, @RequestParam (name = "onlyFuture") boolean onlyFuture) {
+        return new ResponseEntity<>(reservationFacade.getByCustomerPhoneNumber(phoneNumber, onlyFuture) , HttpStatus.OK);
     }
 
 }

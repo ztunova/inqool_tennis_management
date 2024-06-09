@@ -9,13 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -96,14 +97,27 @@ public class ReservationService {
         return orderedReservations.stream().toList();
     }
 
-//    public List<Reservation> getByCustomerPhoneNumber(String phoneNumber, boolean onlyFuture) {
-//        return null;
-//    }
-//
-//    public Reservation update(Reservation reservationUpdate) {
-//        return null;
-//    }
-//
+    public List<Reservation> getByCustomerPhoneNumber(String phoneNumber, boolean onlyFuture) {
+        Optional<Customer> customerOpt = customerService.getCustomerByPhoneNumber(phoneNumber);
+        if (customerOpt.isEmpty()) {
+            throw new EntityNotFoundException("Customer with phone number " + phoneNumber + " not found");
+        }
+
+        Set<Reservation> customersReservations = customerOpt.get().getReservations();
+        List<Reservation> result = new ArrayList<>();
+        if (onlyFuture) {
+            result = customersReservations.stream()
+                    .filter(r -> r.getReservationStart().isAfter(LocalDateTime.now()))
+                    .collect(Collectors.toList());
+        }
+        else {
+            result = customersReservations.stream().toList();
+        }
+        return result;
+    }
+
+
+
 //    public void delete(Long id) {}
 
     private void checkOverlappingReservations(Long courtId, LocalDateTime startTime, LocalDateTime endTime) {

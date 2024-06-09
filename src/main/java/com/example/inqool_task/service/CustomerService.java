@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -19,23 +20,34 @@ public class CustomerService {
     }
 
     public Customer findCustomer(Customer customer) {
-        List<Customer> customers = crudRepository.findByNamedQuery(
-                Customer.FIND_BY_PHONE_NUMBER, Customer.class,
-                Collections.singletonMap("phoneNumber", customer.getPhoneNumber())
-        );
+        Optional<Customer> customerOpt = getCustomerByPhoneNumber(customer.getPhoneNumber());
 
         Customer result;
-        if (customers.isEmpty()) {
+        if (customerOpt.isEmpty()) {
             result = createCustomer(customer);
         }
         else {
-            result = customers.get(0);
+            result = customerOpt.get();
             if (!result.getName().equals(customer.getName())) {
                 throw new IllegalArgumentException("Invalid name for given phone number");
             }
         }
 
         return result;
+    }
+
+    public Optional<Customer> getCustomerByPhoneNumber(String phoneNumber) {
+        List<Customer> customers = crudRepository.findByNamedQuery(
+                Customer.FIND_BY_PHONE_NUMBER, Customer.class,
+                Collections.singletonMap("phoneNumber", phoneNumber)
+        );
+
+        Customer result = null;
+        if (!customers.isEmpty()) {
+            result = customers.get(0);
+        }
+
+        return Optional.ofNullable(result);
     }
 
     private Customer createCustomer(Customer customer) {

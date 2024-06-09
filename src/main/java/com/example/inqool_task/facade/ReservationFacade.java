@@ -43,4 +43,9 @@ public class ReservationFacade {
         return reservations.stream().map(mapper::mapToDto).toList();
     }
 
+    public List<ReservationResponseDto> getByCustomerPhoneNumber(String phoneNumber, boolean onlyFuture) {
+        List<Reservation> reservations = reservationService.getByCustomerPhoneNumber(phoneNumber, onlyFuture);
+        return reservations.stream().map(mapper::mapToDto).toList();
+    }
+
 }
