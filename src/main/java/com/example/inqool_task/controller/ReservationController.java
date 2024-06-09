@@ -38,7 +38,14 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReservationResponseDto>> getAllCourts() {
+    public ResponseEntity<List<ReservationResponseDto>> getAllReservations() {
         return new ResponseEntity<>(reservationFacade.getAll(), HttpStatus.OK);
     }
+
+    @GetMapping("/court-number/{courtNumber}")
+    public ResponseEntity<List<ReservationResponseDto>> getReservationsByCourtNumber(@PathVariable("courtNumber")
+                                                                                         Long courtNumber) {
+        return new ResponseEntity<>(reservationFacade.getByCourtNumber(courtNumber), HttpStatus.OK);
+    }
+
 }

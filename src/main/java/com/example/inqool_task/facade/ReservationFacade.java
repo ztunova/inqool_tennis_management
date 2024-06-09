@@ -38,4 +38,9 @@ public class ReservationFacade {
         return reservations.stream().map(mapper::mapToDto).toList();
     }
 
+    public List<ReservationResponseDto> getByCourtNumber(Long courtNumber) {
+        List<Reservation> reservations = reservationService.getByCourtNumber(courtNumber);
+        return reservations.stream().map(mapper::mapToDto).toList();
+    }
+
 }

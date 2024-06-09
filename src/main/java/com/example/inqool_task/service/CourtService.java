@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourtService {
@@ -24,11 +25,8 @@ public class CourtService {
     }
 
     public Court create(Court court, Long surfaceId) {
-        List<Court> courts = crudRepository.findByNamedQuery(
-                Court.FIND_BY_COURT_NUMBER, Court.class,
-                Collections.singletonMap("courtNumber", court.getCourtNumber())
-        );
-        if (!courts.isEmpty()) {
+        Optional<Court> courtOpt = getCourtByNumber(court.getCourtNumber());
+        if (courtOpt.isPresent()) {
             throw new IllegalArgumentException("Court with given number already exists");
         }
 
@@ -42,6 +40,20 @@ public class CourtService {
         }
 
         return createdCourt;
+    }
+
+    public Optional<Court> getCourtByNumber(Long courtNumber) {
+        List<Court> courts = crudRepository.findByNamedQuery(
+                Court.FIND_BY_COURT_NUMBER, Court.class,
+                Collections.singletonMap("courtNumber", courtNumber)
+        );
+
+        Court result = null;
+        if (!courts.isEmpty()) {
+            result = courts.get(0);
+        }
+
+        return Optional.ofNullable(result);
     }
 
     public Court getById(Long id) {

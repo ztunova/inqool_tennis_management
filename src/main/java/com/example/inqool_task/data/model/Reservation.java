@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -62,8 +63,11 @@ public class Reservation {
 
     private boolean deleted = false;
 
-    @Transient
+ //   @Transient
     private double totalPrice;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
 
 //    @PostLoad

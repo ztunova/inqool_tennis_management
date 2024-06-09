@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Service
 public class ReservationService {
@@ -39,13 +43,14 @@ public class ReservationService {
         customer.addReservation(reservation);
         reservation.setCourt(court);
         court.addReservation(reservation);
+        reservation.calculateTotalPrice();
 
         Reservation createdReservation = crudRepository.create(reservation);
         if (createdReservation == null) {
             System.out.println("FAIL CREATE RESERVATION");
         }
 
-        createdReservation.calculateTotalPrice();
+//        createdReservation.calculateTotalPrice();
         return createdReservation;
     }
 
@@ -63,13 +68,35 @@ public class ReservationService {
         }
 
         Reservation result = reservations.get(0);
-        result.calculateTotalPrice();
+ //       result.calculateTotalPrice();
         return result;
     }
 
     public List<Reservation> getAll() {
         return crudRepository.findByNamedQuery(Reservation.FIND_ALL_QUERY, Reservation.class, null);
     }
+
+    public List<Reservation> getByCourtNumber(Long courtNumber) {
+        Optional<Court> courtOpt = courtService.getCourtByNumber(courtNumber);
+        if (courtOpt.isEmpty()) {
+            throw new EntityNotFoundException("Court with number " + courtNumber + " not found");
+        }
+
+        Set<Reservation> courtsReservations = courtOpt.get().getReservations();
+        TreeSet<Reservation> orderedReservations = new TreeSet<>(Comparator.comparing(Reservation::getCreatedAt));
+        orderedReservations.addAll(courtsReservations);
+        return orderedReservations.stream().toList();
+    }
+
+//    public List<Reservation> getByCustomerPhoneNumber(String phoneNumber, boolean onlyFuture) {
+//        return null;
+//    }
+//
+//    public Reservation update(Reservation reservationUpdate) {
+//        return null;
+//    }
+//
+//    public void delete(Long id) {}
 
     private void checkOverlappingReservations(Long courtId, LocalDateTime startTime, LocalDateTime endTime) {
         List<Long> overlappingReservationIds = crudRepository.findOverlappingReservations(courtId, startTime, endTime);

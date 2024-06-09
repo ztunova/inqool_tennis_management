@@ -6,10 +6,6 @@ public class EntityNotFoundException extends RuntimeException {
         super("Entity not found");
     }
 
-    public EntityNotFoundException(Long id) {
-        super("Steward with id " + id.toString() + " not found");
-    }
-
     public EntityNotFoundException(String type, Long id) {
         super(type + " with id " + id.toString() + " not found");
     }
