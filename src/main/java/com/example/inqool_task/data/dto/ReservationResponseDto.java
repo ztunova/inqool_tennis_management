@@ -16,6 +16,6 @@ public class ReservationResponseDto {
     private String reservationStart;
     private String reservationEnd;
     private double totalPrice;
-    private CourtDto court;
+    private CourtResponseDto court;
     private CustomerDto customer;
 }

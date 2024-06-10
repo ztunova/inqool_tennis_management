@@ -77,9 +77,10 @@ public class CourtService {
          return crudRepository.findByNamedQuery(Court.FIND_ALL_QUERY, Court.class, null);
     }
 
-    public Court update(Court courtToUpdate) {
-        if (courtToUpdate.getSurface() != null) {
-            surfaceService.getById(courtToUpdate.getSurface().getId());
+    public Court update(Long surfaceId, Court courtToUpdate) {
+        if (surfaceId != null) {
+            CourtSurface surface = surfaceService.getById(surfaceId);
+            courtToUpdate.setSurface(surface);
         }
         Court updatedCourt = crudRepository.update(courtToUpdate);
         if (updatedCourt == null) {
@@ -98,7 +99,8 @@ public class CourtService {
         }
         courtToDelete.setReservations(updatedReservations);
         courtToDelete.setDeleted(true);
-        update(courtToDelete);
+        // update(courtToDelete);
+        crudRepository.update(courtToDelete);
     }
 
 }

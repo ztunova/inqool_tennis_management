@@ -1,7 +1,7 @@
 package com.example.inqool_task.controller;
 
-import com.example.inqool_task.data.dto.CourtDto;
-import com.example.inqool_task.data.dto.CreateCourtDto;
+import com.example.inqool_task.data.dto.CourtResponseDto;
+import com.example.inqool_task.data.dto.CourtRequestDto;
 import com.example.inqool_task.facade.CourtFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,27 +30,28 @@ public class CourtController {
     }
 
     @PostMapping
-    public ResponseEntity<CourtDto> createCourt(@RequestBody CreateCourtDto court) {
+    public ResponseEntity<CourtResponseDto> createCourt(@RequestBody CourtRequestDto court) {
         return new ResponseEntity<>(courtFacade.create(court), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourtDto> getCourtById(@PathVariable("id") Long id) {
+    public ResponseEntity<CourtResponseDto> getCourtById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(courtFacade.getById(id), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<CourtDto>> getAllCourts() {
+    public ResponseEntity<List<CourtResponseDto>> getAllCourts() {
         return new ResponseEntity<>(courtFacade.getAll(), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<CourtDto> updateCourt(@RequestBody CourtDto court) {
-        return new ResponseEntity<>(courtFacade.update(court), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<CourtResponseDto> updateCourt(
+            @PathVariable("id") Long id, @RequestBody CourtRequestDto court) {
+        return new ResponseEntity<>(courtFacade.update(id, court), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSurface(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteCourt(@PathVariable("id") Long id) {
         courtFacade.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

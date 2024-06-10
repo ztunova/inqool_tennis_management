@@ -1,8 +1,8 @@
 package com.example.inqool_task.data;
 
-import com.example.inqool_task.data.dto.CourtDto;
+import com.example.inqool_task.data.dto.CourtResponseDto;
 import com.example.inqool_task.data.dto.CourtSurfaceResponseDto;
-import com.example.inqool_task.data.dto.CreateCourtDto;
+import com.example.inqool_task.data.dto.CourtRequestDto;
 import com.example.inqool_task.data.dto.CourtSurfaceRequestDto;
 import com.example.inqool_task.data.dto.CustomerDto;
 import com.example.inqool_task.data.dto.ReservationRequestDto;
@@ -51,26 +51,26 @@ public class Mapper {
 
 //    -------------- courts
 
-    public Court mapToEntity(CreateCourtDto courtDto) {
+    public Court mapToEntity(CourtRequestDto courtDto) {
         Court court = new Court();
         court.setCourtNumber(courtDto.getCourtNumber());
         return court;
     }
 
-    public Court mapToEntity(CourtDto courtDto) {
+    public Court mapToEntity(CourtResponseDto courtResponseDto) {
         Court court = new Court();
-        court.setId(courtDto.getId());
-        court.setCourtNumber(courtDto.getCourtNumber());
-        court.setSurface(mapToEntity(courtDto.getSurface()));
+        court.setId(courtResponseDto.getId());
+        court.setCourtNumber(courtResponseDto.getCourtNumber());
+        court.setSurface(mapToEntity(courtResponseDto.getSurface()));
         return court;
     }
 
-    public CourtDto mapToDto(Court court) {
-        CourtDto courtDto = new CourtDto();
-        courtDto.setId(court.getId());
-        courtDto.setCourtNumber(court.getCourtNumber());
-        courtDto.setSurface(mapToDto(court.getSurface()));
-        return courtDto;
+    public CourtResponseDto mapToDto(Court court) {
+        CourtResponseDto courtResponseDto = new CourtResponseDto();
+        courtResponseDto.setId(court.getId());
+        courtResponseDto.setCourtNumber(court.getCourtNumber());
+        courtResponseDto.setSurface(mapToDto(court.getSurface()));
+        return courtResponseDto;
     }
 
 //    -------------- reservations

@@ -9,7 +9,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class CourtDto {
+public class CourtResponseDto {
     private Long id;
     private Long courtNumber;
     private CourtSurfaceResponseDto surface;

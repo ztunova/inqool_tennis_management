@@ -1,14 +1,10 @@
 package com.example.inqool_task.facade;
 
 import com.example.inqool_task.data.Mapper;
-import com.example.inqool_task.data.dto.CourtDto;
-import com.example.inqool_task.data.dto.CourtSurfaceDto;
-import com.example.inqool_task.data.dto.CreateCourtDto;
-import com.example.inqool_task.data.dto.CreateSurfaceDto;
+import com.example.inqool_task.data.dto.CourtResponseDto;
+import com.example.inqool_task.data.dto.CourtRequestDto;
 import com.example.inqool_task.data.model.Court;
-import com.example.inqool_task.data.model.CourtSurface;
 import com.example.inqool_task.service.CourtService;
-import com.example.inqool_task.service.CourtSurfaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,21 +23,23 @@ public class CourtFacade {
         this.mapper = mapper;
     }
 
-    public CourtDto create(CreateCourtDto newCourt) {
+    public CourtResponseDto create(CourtRequestDto newCourt) {
         return mapper.mapToDto(courtService.create(mapper.mapToEntity(newCourt), newCourt.getSurfaceId()));
     }
 
-    public CourtDto getById(Long id) {
+    public CourtResponseDto getById(Long id) {
         return mapper.mapToDto(courtService.getById(id));
     }
 
-    public List<CourtDto> getAll() {
+    public List<CourtResponseDto> getAll() {
         List<Court> courts = courtService.getAll();
         return courts.stream().map(mapper::mapToDto).toList();
     }
 
-    public CourtDto update(CourtDto courtToUpdateDto) {
-        return mapper.mapToDto(courtService.update(mapper.mapToEntity(courtToUpdateDto)));
+    public CourtResponseDto update(Long id, CourtRequestDto courtToUpdateDto) {
+        Court courtToUpdate = mapper.mapToEntity(courtToUpdateDto);
+        courtToUpdate.setId(id);
+        return mapper.mapToDto(courtService.update(courtToUpdateDto.getSurfaceId(), courtToUpdate));
     }
 
     public void delete(Long id) {
