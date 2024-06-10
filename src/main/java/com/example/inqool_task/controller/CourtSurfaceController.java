@@ -3,6 +3,7 @@ package com.example.inqool_task.controller;
 import com.example.inqool_task.data.dto.CourtSurfaceResponseDto;
 import com.example.inqool_task.data.dto.CourtSurfaceRequestDto;
 import com.example.inqool_task.facade.CourtSurfaceFacade;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,7 +32,7 @@ public class CourtSurfaceController {
     }
 
     @PostMapping
-    public ResponseEntity<CourtSurfaceResponseDto> createSurface(@RequestBody CourtSurfaceRequestDto surface) {
+    public ResponseEntity<CourtSurfaceResponseDto> createSurface(@Valid @RequestBody CourtSurfaceRequestDto surface) {
         return new ResponseEntity<>(surfaceFacade.create(surface), HttpStatus.CREATED);
     }
 
@@ -47,7 +48,7 @@ public class CourtSurfaceController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CourtSurfaceResponseDto> updateSurface(
-            @PathVariable("id") Long id, @RequestBody CourtSurfaceRequestDto surface) {
+            @PathVariable("id") Long id, @Valid @RequestBody CourtSurfaceRequestDto surface) {
         return new ResponseEntity<>(surfaceFacade.update(id, surface), HttpStatus.OK);
     }
 

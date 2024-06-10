@@ -3,6 +3,7 @@ package com.example.inqool_task.controller;
 import com.example.inqool_task.data.dto.CourtResponseDto;
 import com.example.inqool_task.data.dto.CourtRequestDto;
 import com.example.inqool_task.facade.CourtFacade;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,7 +31,7 @@ public class CourtController {
     }
 
     @PostMapping
-    public ResponseEntity<CourtResponseDto> createCourt(@RequestBody CourtRequestDto court) {
+    public ResponseEntity<CourtResponseDto> createCourt(@Valid @RequestBody CourtRequestDto court) {
         return new ResponseEntity<>(courtFacade.create(court), HttpStatus.CREATED);
     }
 
@@ -46,7 +47,7 @@ public class CourtController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CourtResponseDto> updateCourt(
-            @PathVariable("id") Long id, @RequestBody CourtRequestDto court) {
+            @PathVariable("id") Long id, @Valid @RequestBody CourtRequestDto court) {
         return new ResponseEntity<>(courtFacade.update(id, court), HttpStatus.OK);
     }
 

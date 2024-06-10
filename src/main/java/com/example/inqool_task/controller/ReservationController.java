@@ -3,6 +3,7 @@ package com.example.inqool_task.controller;
 import com.example.inqool_task.data.dto.ReservationRequestDto;
 import com.example.inqool_task.data.dto.ReservationResponseDto;
 import com.example.inqool_task.facade.ReservationFacade;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,7 +32,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationResponseDto> createReservation(@RequestBody ReservationRequestDto reservation) {
+    public ResponseEntity<ReservationResponseDto> createReservation(@Valid @RequestBody ReservationRequestDto reservation) {
         return new ResponseEntity<>(reservationFacade.create(reservation), HttpStatus.CREATED);
     }
 
@@ -59,7 +60,7 @@ public class ReservationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ReservationResponseDto> updateReservation(
-            @PathVariable("id") Long id, @RequestBody ReservationRequestDto reservationDto) {
+            @PathVariable("id") Long id, @Valid @RequestBody ReservationRequestDto reservationDto) {
         return new ResponseEntity<>(reservationFacade.update(id, reservationDto), HttpStatus.OK);
     }
 
