@@ -7,10 +7,15 @@ import com.example.inqool_task.data.dto.CourtSurfaceResponseDto;
 import com.example.inqool_task.data.dto.CustomerDto;
 import com.example.inqool_task.data.dto.ReservationRequestDto;
 import com.example.inqool_task.data.dto.ReservationResponseDto;
+import com.example.inqool_task.data.model.Court;
+import com.example.inqool_task.data.model.CourtSurface;
+import com.example.inqool_task.data.model.Customer;
 import com.example.inqool_task.data.model.GameType;
+import com.example.inqool_task.data.model.Reservation;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 
 @Component
 public class TestDataFactory {
@@ -24,10 +29,13 @@ public class TestDataFactory {
 
     public static CourtSurfaceRequestDto courtSurfaceRequestDto = getSurfaceRequestDto();
     public static CourtSurfaceResponseDto courtSurfaceResponseDto = getSurfaceResponseDto();
+    public static final CourtSurface courtSurfaceEntity = getSurfaceEntity();
     public static CourtRequestDto courtRequestDto = getCourtRequestDto();
+    public static final Court courtEntity = getCourtEntity();
     public static CourtResponseDto courtResponseDto = getCourtResponseDto();
     public static ReservationRequestDto reservationRequestDto = getReservationRequestDto();
     public static ReservationResponseDto reservationResponseDto = getReservationResponseDto();
+    public static Reservation reservationEntity = getReservationEntity();
 
     private static CourtSurfaceRequestDto getSurfaceRequestDto() {
         CourtSurfaceRequestDto surfaceRequestDto = new CourtSurfaceRequestDto();
@@ -44,6 +52,15 @@ public class TestDataFactory {
         return surfaceResponseDto;
     }
 
+    private static CourtSurface getSurfaceEntity() {
+        CourtSurface surface = new CourtSurface();
+        surface.setId(ID);
+        surface.setSurface("grass");
+        surface.setPricePerMinute(1.0);
+        surface.setCourts(new HashSet<>());
+        return surface;
+    }
+
     private static CourtRequestDto getCourtRequestDto() {
         CourtRequestDto courtRequestDto = new CourtRequestDto();
         courtRequestDto.setCourtNumber(1L);
@@ -57,6 +74,15 @@ public class TestDataFactory {
         courtResponseDto.setCourtNumber(1L);
         courtResponseDto.setSurface(courtSurfaceResponseDto);
         return courtResponseDto;
+    }
+
+    private static Court getCourtEntity() {
+        Court court = new Court();
+        court.setId(ID);
+        court.setCourtNumber(1L);
+        court.setSurface(getSurfaceEntity());
+        court.setReservations(new HashSet<>());
+        return court;
     }
 
     private static ReservationRequestDto getReservationRequestDto() {
@@ -81,10 +107,30 @@ public class TestDataFactory {
         return reservationResponseDto;
     }
 
+    private static Reservation getReservationEntity() {
+        Reservation reservation = new Reservation();
+        reservation.setId(ID);
+        reservation.setReservationStart(RESERVATION_START);
+        reservation.setReservationEnd(RESERVATION_END);
+        reservation.setGameType(GAME_TYPE);
+        reservation.setCustomer(getCustomerEntity());
+        reservation.setCourt(getCourtEntity());
+        reservation.setTotalPrice(100);
+        reservation.setCreatedAt(LocalDateTime.now());
+        return reservation;
+    }
+
     private static CustomerDto getCustomerDto() {
         CustomerDto customerDto = new CustomerDto();
         customerDto.setName("Percy Jackson");
         customerDto.setPhoneNumber(PHONE_NUMBER);
         return customerDto;
+    }
+
+    private static Customer getCustomerEntity() {
+        Customer customer = new Customer();
+        customer.setName("Percy Jackson");
+        customer.setPhoneNumber(PHONE_NUMBER);
+        return customer;
     }
 }
