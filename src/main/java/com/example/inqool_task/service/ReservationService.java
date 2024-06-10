@@ -35,16 +35,9 @@ public class ReservationService {
     }
 
     public Reservation create(Reservation reservation, Long courtId) {
-        checkOverlappingReservations(courtId, reservation.getReservationStart(), reservation.getReservationEnd());
+        checkOverlappingReservations(null, courtId, reservation.getReservationStart(), reservation.getReservationEnd());
 
-        Customer customer = customerService.findCustomer(reservation.getCustomer());
-        Court court = courtService.getById(courtId);
-
-        reservation.setCustomer(customer);
-        customer.addReservation(reservation);
-        reservation.setCourt(court);
-        court.addReservation(reservation);
-        reservation.calculateTotalPrice();
+        setUpReservation(courtId, reservation);
 
         Reservation createdReservation = crudRepository.create(reservation);
         if (createdReservation == null) {
@@ -116,12 +109,39 @@ public class ReservationService {
         return result;
     }
 
+    public Reservation update(Long courtId, Reservation reservationUpdate) {
+        Reservation reservationDb = getById(reservationUpdate.getId());
+        checkOverlappingReservations(
+                reservationUpdate.getId(), courtId,
+                reservationUpdate.getReservationStart(), reservationUpdate.getReservationEnd());
+
+        setUpReservation(courtId, reservationUpdate);
+        reservationUpdate.setCreatedAt(reservationDb.getCreatedAt());
+
+        Reservation updated = crudRepository.update(reservationUpdate);
+        if (updated == null) {
+            System.out.println("RES UPDATE FAIL");
+        }
+
+        return updated;
+    }
 
 
-//    public void delete(Long id) {}
+    private void setUpReservation(Long courtId, Reservation reservationUpdate) {
+        Customer customer = customerService.findCustomer(reservationUpdate.getCustomer());
+        Court court = courtService.getById(courtId);
 
-    private void checkOverlappingReservations(Long courtId, LocalDateTime startTime, LocalDateTime endTime) {
-        List<Long> overlappingReservationIds = crudRepository.findOverlappingReservations(courtId, startTime, endTime);
+        reservationUpdate.setCustomer(customer);
+        customer.addReservation(reservationUpdate);
+        reservationUpdate.setCourt(court);
+        court.addReservation(reservationUpdate);
+        reservationUpdate.calculateTotalPrice();
+    }
+
+    private void checkOverlappingReservations(Long reservationId, Long courtId, LocalDateTime startTime, LocalDateTime endTime) {
+        Long reservationIdQuery = reservationId == null ? -1 : reservationId;
+        List<Long> overlappingReservationIds = crudRepository.findOverlappingReservations(
+                reservationIdQuery, startTime, endTime, courtId);
         if (!overlappingReservationIds.isEmpty()) {
             throw new IllegalArgumentException("Reservation overlapping with folowing reservations: " + overlappingReservationIds);
         }

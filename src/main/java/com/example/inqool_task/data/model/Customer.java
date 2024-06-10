@@ -73,10 +73,10 @@ public class Customer {
             return true;
         }
 
-        if (!(obj instanceof Customer u)) {
+        if (!(obj instanceof Customer c)) {
             return false;
         }
 
-        return Objects.equals(this.phoneNumber, u.phoneNumber);
+        return Objects.equals(this.phoneNumber, c.phoneNumber) && Objects.equals(this.name, c.name);
     }
 }

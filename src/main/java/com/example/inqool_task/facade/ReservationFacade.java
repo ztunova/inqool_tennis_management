@@ -1,10 +1,8 @@
 package com.example.inqool_task.facade;
 
 import com.example.inqool_task.data.Mapper;
-import com.example.inqool_task.data.dto.CourtDto;
 import com.example.inqool_task.data.dto.ReservationRequestDto;
 import com.example.inqool_task.data.dto.ReservationResponseDto;
-import com.example.inqool_task.data.model.Court;
 import com.example.inqool_task.data.model.Reservation;
 import com.example.inqool_task.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +44,12 @@ public class ReservationFacade {
     public List<ReservationResponseDto> getByCustomerPhoneNumber(String phoneNumber, boolean onlyFuture) {
         List<Reservation> reservations = reservationService.getByCustomerPhoneNumber(phoneNumber, onlyFuture);
         return reservations.stream().map(mapper::mapToDto).toList();
+    }
+
+    public ReservationResponseDto update(Long reservationId, ReservationRequestDto reservationDto) {
+        Reservation reservationUpdate = mapper.mapToEntity(reservationDto);
+        reservationUpdate.setId(reservationId);
+        return mapper.mapToDto(reservationService.update(reservationDto.getCourtId(), reservationUpdate));
     }
 
 }
