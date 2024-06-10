@@ -22,8 +22,8 @@ public class TestDataFactory {
 
     private static final Long ID = 1L;
     private static final GameType GAME_TYPE = GameType.SINGLES_MATCH;
-    private static final LocalDateTime RESERVATION_START = LocalDateTime.now();
-    private static final LocalDateTime RESERVATION_END = LocalDateTime.now().plusHours(1);
+    public static final LocalDateTime RESERVATION_START = LocalDateTime.now().plusDays(1);
+    public static final LocalDateTime RESERVATION_END = LocalDateTime.now().plusDays(1).plusHours(1);
 
     public static final String PHONE_NUMBER = "0915432567";
 
@@ -36,6 +36,7 @@ public class TestDataFactory {
     public static ReservationRequestDto reservationRequestDto = getReservationRequestDto();
     public static ReservationResponseDto reservationResponseDto = getReservationResponseDto();
     public static Reservation reservationEntity = getReservationEntity();
+    public static Customer customerEntity = getCustomerEntity();
 
     private static CourtSurfaceRequestDto getSurfaceRequestDto() {
         CourtSurfaceRequestDto surfaceRequestDto = new CourtSurfaceRequestDto();
