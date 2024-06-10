@@ -106,6 +106,7 @@ public class ReservationService {
 
         setUpReservation(courtId, reservationUpdate);
         reservationUpdate.setCreatedAt(reservationDb.getCreatedAt());
+        reservationUpdate.calculateTotalPrice();
 
         return crudRepository.update(reservationUpdate);
     }
