@@ -19,12 +19,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -42,33 +39,6 @@ public class ReservationServiceTest {
 
     @InjectMocks
     private ReservationService reservationService;
-
-//    @Test
-//    void createReservation_creationSuccessful_returnsReservation() {
-//        Reservation reservation = TestDataFactory.reservationEntity;
-//
-//        Mockito.when(crudRepository.findOverlappingReservations(
-//                -1L, TestDataFactory.RESERVATION_START, TestDataFactory.RESERVATION_END, 1L))
-//                .thenReturn(new ArrayList<>());
-//        Mockito.when(customerService.findCustomer(TestDataFactory.customerEntity)).thenReturn(TestDataFactory.customerEntity);
-//        Mockito.when(courtService.getById(1L)).thenReturn(TestDataFactory.courtEntity);
-//        Mockito.when(crudRepository.create(reservation)).thenReturn(reservation);
-//
-//        Reservation reservationReturned = reservationService.create(reservation, 1L);
-//
-//        assertThat(reservationReturned).isEqualTo(reservation);
-//    }
-
-//    @Test
-//    void createReservation_reservationOverlapping_throwsException() {
-//        Reservation reservation = TestDataFactory.reservationEntity;
-//
-//        Mockito.lenient().when(crudRepository.findOverlappingReservations(
-//                        -1L, TestDataFactory.RESERVATION_START, TestDataFactory.RESERVATION_END, 1L))
-//                .thenReturn(List.of(1L, 2L));
-//
-//        assertThrows(IllegalArgumentException.class, () -> reservationService.create(reservation, 1L));
-//    }
 
     @Test
     void findById_reservationFound_returnsReservation() {
@@ -132,23 +102,6 @@ public class ReservationServiceTest {
         assertThrows(EntityNotFoundException.class, () -> reservationService.getByCourtNumber(1L));
     }
 
-//    @Test
-//    void getByCustomerPhoneNumber_allReservationsListed_returnsListOfReservations() {
-//        Reservation pastReservation = TestDataFactory.reservationEntity;
-//        pastReservation.setReservationStart(LocalDateTime.now().minusDays(1));
-//        pastReservation.setReservationEnd(LocalDateTime.now().minusDays(1).plusHours(1));
-//
-//        List<Reservation> reservations = List.of(pastReservation);
-//        Customer customer = TestDataFactory.customerEntity;
-//        customer.addReservation(pastReservation);
-//
-//        Mockito.when(customerService.getCustomerByPhoneNumber(TestDataFactory.PHONE_NUMBER)).thenReturn(Optional.of(customer));
-//
-//        List<Reservation> reservationsReturned = reservationService.getByCustomerPhoneNumber(TestDataFactory.PHONE_NUMBER, false);
-//
-//        assertThat(reservationsReturned).isEqualTo(reservations);
-//    }
-
     @Test
     void getByCustomerPhoneNumber_futureReservationsListed_returnsListOfReservations() {
         Reservation pastReservation = TestDataFactory.reservationEntity;
@@ -165,23 +118,6 @@ public class ReservationServiceTest {
 
         assertThat(reservationsReturned).isEmpty();
     }
-
-//    @Test
-//    void updateReservation_reservationFound_returnsReservation() {
-//        Reservation reservation = TestDataFactory.reservationEntity;
-//        Map<String, Object> params = Collections.singletonMap("id", reservation.getId());
-//        List<Reservation> reservations = List.of(reservation);
-//
-//        Mockito.when(crudRepository.findByNamedQuery(Reservation.FIND_BY_ID_QUERY, Reservation.class, params))
-//                .thenReturn(reservations);
-//        Mockito.when(customerService.findCustomer(TestDataFactory.customerEntity)).thenReturn(TestDataFactory.customerEntity);
-//        Mockito.when(courtService.getById(1L)).thenReturn(TestDataFactory.courtEntity);
-//        Mockito.when(crudRepository.update(reservation)).thenReturn(reservation);
-//
-//        Reservation reservationReturned = reservationService.update(1L, reservation);
-//
-//        assertThat(reservationReturned).isEqualTo(reservation);
-//    }
 
     @Test
     void deleteReservation_reservationFound_returnsVoid() {

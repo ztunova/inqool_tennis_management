@@ -27,6 +27,8 @@ public class TestDataFactory {
 
     public static final String PHONE_NUMBER = "0915432567";
 
+    public static final String CUSTOMER_NAME = "Percy Jackson";
+
     public static CourtSurfaceRequestDto courtSurfaceRequestDto = getSurfaceRequestDto();
     public static CourtSurfaceResponseDto courtSurfaceResponseDto = getSurfaceResponseDto();
     public static final CourtSurface courtSurfaceEntity = getSurfaceEntity();
@@ -37,6 +39,7 @@ public class TestDataFactory {
     public static ReservationResponseDto reservationResponseDto = getReservationResponseDto();
     public static Reservation reservationEntity = getReservationEntity();
     public static Customer customerEntity = getCustomerEntity();
+    public static CustomerDto customerDto = getCustomerDto();
 
     private static CourtSurfaceRequestDto getSurfaceRequestDto() {
         CourtSurfaceRequestDto surfaceRequestDto = new CourtSurfaceRequestDto();
@@ -130,7 +133,7 @@ public class TestDataFactory {
 
     private static Customer getCustomerEntity() {
         Customer customer = new Customer();
-        customer.setName("Percy Jackson");
+        customer.setName(CUSTOMER_NAME);
         customer.setPhoneNumber(PHONE_NUMBER);
         return customer;
     }
