@@ -1,7 +1,7 @@
 package com.example.inqool_task.controller;
 
-import com.example.inqool_task.data.dto.CourtSurfaceDto;
-import com.example.inqool_task.data.dto.CreateSurfaceDto;
+import com.example.inqool_task.data.dto.CourtSurfaceResponseDto;
+import com.example.inqool_task.data.dto.CourtSurfaceRequestDto;
 import com.example.inqool_task.facade.CourtSurfaceFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,23 +31,24 @@ public class CourtSurfaceController {
     }
 
     @PostMapping
-    public ResponseEntity<CourtSurfaceDto> createSurface(@RequestBody CreateSurfaceDto surface) {
+    public ResponseEntity<CourtSurfaceResponseDto> createSurface(@RequestBody CourtSurfaceRequestDto surface) {
         return new ResponseEntity<>(surfaceFacade.create(surface), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourtSurfaceDto> getSurfaceById(@PathVariable("id") Long id) {
+    public ResponseEntity<CourtSurfaceResponseDto> getSurfaceById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(surfaceFacade.getById(id), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<CourtSurfaceDto>> getAllSurfaces() {
+    public ResponseEntity<List<CourtSurfaceResponseDto>> getAllSurfaces() {
         return new ResponseEntity<>(surfaceFacade.getAll(), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<CourtSurfaceDto> updateSurface(@RequestBody CourtSurfaceDto surface) {
-        return new ResponseEntity<>(surfaceFacade.update(surface), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<CourtSurfaceResponseDto> updateSurface(
+            @PathVariable("id") Long id, @RequestBody CourtSurfaceRequestDto surface) {
+        return new ResponseEntity<>(surfaceFacade.update(id, surface), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

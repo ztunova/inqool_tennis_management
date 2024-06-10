@@ -1,9 +1,9 @@
 package com.example.inqool_task.data;
 
 import com.example.inqool_task.data.dto.CourtDto;
-import com.example.inqool_task.data.dto.CourtSurfaceDto;
+import com.example.inqool_task.data.dto.CourtSurfaceResponseDto;
 import com.example.inqool_task.data.dto.CreateCourtDto;
-import com.example.inqool_task.data.dto.CreateSurfaceDto;
+import com.example.inqool_task.data.dto.CourtSurfaceRequestDto;
 import com.example.inqool_task.data.dto.CustomerDto;
 import com.example.inqool_task.data.dto.ReservationRequestDto;
 import com.example.inqool_task.data.dto.ReservationResponseDto;
@@ -20,14 +20,16 @@ import java.time.format.DateTimeParseException;
 @Service
 public class Mapper {
 
-    public CourtSurface mapToEntity(CreateSurfaceDto surfaceDto) {
+//    -------------- court surface
+
+    public CourtSurface mapToEntity(CourtSurfaceRequestDto surfaceDto) {
         CourtSurface surface = new CourtSurface();
         surface.setSurface(surfaceDto.getSurface());
         surface.setPricePerMinute(surfaceDto.getPricePerMinute());
         return surface;
     }
 
-    public CourtSurface mapToEntity(CourtSurfaceDto surfaceDto) {
+    public CourtSurface mapToEntity(CourtSurfaceResponseDto surfaceDto) {
         CourtSurface surface = new CourtSurface();
         surface.setId(surfaceDto.getId());
         surface.setSurface(surfaceDto.getSurface());
@@ -35,12 +37,12 @@ public class Mapper {
         return surface;
     }
 
-    public CourtSurfaceDto mapToDto(CourtSurface surface) {
+    public CourtSurfaceResponseDto mapToDto(CourtSurface surface) {
         if (surface == null) {
             return null;
         }
 
-        CourtSurfaceDto surfaceDto = new CourtSurfaceDto();
+        CourtSurfaceResponseDto surfaceDto = new CourtSurfaceResponseDto();
         surfaceDto.setId(surface.getId());
         surfaceDto.setSurface(surface.getSurface());
         surfaceDto.setPricePerMinute(surface.getPricePerMinute());
