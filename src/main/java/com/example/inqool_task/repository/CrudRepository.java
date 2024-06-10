@@ -119,7 +119,7 @@ public class CrudRepository {
             from
                 Reservation res
             where
-                res.id != :reservationId  and res.court.id = :courtId and (
+                res.deleted = false and res.id != :reservationId  and res.court.id = :courtId and (
                     res.reservationStart between :startTime and :endTime
                     or :startTime between res.reservationStart and res.reservationEnd
                     or :endTime between res.reservationStart and res.reservationEnd

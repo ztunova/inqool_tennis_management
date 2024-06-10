@@ -63,4 +63,10 @@ public class ReservationController {
         return new ResponseEntity<>(reservationFacade.update(id, reservationDto), HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable("id") Long id) {
+        reservationFacade.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

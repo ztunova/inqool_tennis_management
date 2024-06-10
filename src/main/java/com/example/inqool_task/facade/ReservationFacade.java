@@ -52,4 +52,8 @@ public class ReservationFacade {
         return mapper.mapToDto(reservationService.update(reservationDto.getCourtId(), reservationUpdate));
     }
 
+    public void delete(Long id) {
+        reservationService.delete(id);
+    }
+
 }

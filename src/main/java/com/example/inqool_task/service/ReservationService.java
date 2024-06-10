@@ -76,18 +76,23 @@ public class ReservationService {
             throw new EntityNotFoundException("Court with number " + courtNumber + " not found");
         }
 
-        Set<Reservation> courtsReservations = courtOpt.get().getReservations();
+        List<Reservation> courtsReservations = courtOpt.get().getReservations()
+                .stream()
+                .filter(r -> !r.isDeleted())
+                .sorted(((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt())))
+                .toList();
 
         // order reservations from newest to oldest by created at field
-        Comparator<Reservation> compareByDateCreated = new Comparator<Reservation>() {
-            @Override
-            public int compare(Reservation o1, Reservation o2) {
-                return o2.getCreatedAt().compareTo(o1.getCreatedAt());
-            }
-        };
-        TreeSet<Reservation> orderedReservations = new TreeSet<>(compareByDateCreated);
-        orderedReservations.addAll(courtsReservations);
-        return orderedReservations.stream().toList();
+//        Comparator<Reservation> compareByDateCreated = new Comparator<Reservation>() {
+//            @Override
+//            public int compare(Reservation o1, Reservation o2) {
+//                return o2.getCreatedAt().compareTo(o1.getCreatedAt());
+//            }
+//        };
+//        TreeSet<Reservation> orderedReservations = new TreeSet<>(compareByDateCreated);
+//        orderedReservations.addAll(courtsReservations);
+//        return orderedReservations.stream().toList();
+        return courtsReservations;
     }
 
     public List<Reservation> getByCustomerPhoneNumber(String phoneNumber, boolean onlyFuture) {
@@ -100,11 +105,14 @@ public class ReservationService {
         List<Reservation> result = new ArrayList<>();
         if (onlyFuture) {
             result = customersReservations.stream()
+                    .filter(r -> !r.isDeleted())
                     .filter(r -> r.getReservationStart().isAfter(LocalDateTime.now()))
                     .collect(Collectors.toList());
         }
         else {
-            result = customersReservations.stream().toList();
+            result = customersReservations.stream()
+                    .filter(r -> !r.isDeleted())
+                    .toList();
         }
         return result;
     }
@@ -126,6 +134,11 @@ public class ReservationService {
         return updated;
     }
 
+    public void delete(Long id) {
+        Reservation reservationToDelete = getById(id);
+        reservationToDelete.setDeleted(true);
+        crudRepository.update(reservationToDelete);
+    }
 
     private void setUpReservation(Long courtId, Reservation reservationUpdate) {
         Customer customer = customerService.findCustomer(reservationUpdate.getCustomer());
