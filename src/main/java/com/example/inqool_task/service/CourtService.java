@@ -2,14 +2,17 @@ package com.example.inqool_task.service;
 
 import com.example.inqool_task.data.model.Court;
 import com.example.inqool_task.data.model.CourtSurface;
+import com.example.inqool_task.data.model.Reservation;
 import com.example.inqool_task.exceptions.EntityNotFoundException;
 import com.example.inqool_task.repository.CrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class CourtService {
@@ -87,9 +90,13 @@ public class CourtService {
 
     public void delete(Long id) {
         Court courtToDelete = getById(id);
-        if (courtToDelete == null) {
-            throw new EntityNotFoundException("Court", id);
+        Set<Reservation> updatedReservations = new HashSet<>();
+        for (Reservation reservation : courtToDelete.getReservations()) {
+            reservation.setTotalPrice(0);
+            reservation.setCourt(null);
+            updatedReservations.add(reservation);
         }
+        courtToDelete.setReservations(updatedReservations);
         courtToDelete.setDeleted(true);
         update(courtToDelete);
     }

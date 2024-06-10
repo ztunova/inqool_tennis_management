@@ -97,7 +97,9 @@ public class Mapper {
         reservationDto.setReservationStart(reservation.getReservationStart().toString());
         reservationDto.setReservationEnd(reservation.getReservationEnd().toString());
         reservationDto.setTotalPrice(reservation.getTotalPrice());
-        reservationDto.setCourt(mapToDto(reservation.getCourt()));
+        if (reservation.getCourt() != null) {
+            reservationDto.setCourt(mapToDto(reservation.getCourt()));
+        }
         reservationDto.setCustomer(mapToDto(reservation.getCustomer()));
 
         return reservationDto;
