@@ -29,14 +29,6 @@ public class Mapper {
         return surface;
     }
 
-    public CourtSurface mapToEntity(CourtSurfaceResponseDto surfaceDto) {
-        CourtSurface surface = new CourtSurface();
-        surface.setId(surfaceDto.getId());
-        surface.setSurface(surfaceDto.getSurface());
-        surface.setPricePerMinute(surfaceDto.getPricePerMinute());
-        return surface;
-    }
-
     public CourtSurfaceResponseDto mapToDto(CourtSurface surface) {
         if (surface == null) {
             return null;
@@ -49,7 +41,7 @@ public class Mapper {
         return surfaceDto;
     }
 
-//    -------------- courts
+//    -------------- court
 
     public Court mapToEntity(CourtRequestDto courtDto) {
         Court court = new Court();
@@ -57,15 +49,11 @@ public class Mapper {
         return court;
     }
 
-    public Court mapToEntity(CourtResponseDto courtResponseDto) {
-        Court court = new Court();
-        court.setId(courtResponseDto.getId());
-        court.setCourtNumber(courtResponseDto.getCourtNumber());
-        court.setSurface(mapToEntity(courtResponseDto.getSurface()));
-        return court;
-    }
-
     public CourtResponseDto mapToDto(Court court) {
+        if (court == null) {
+            return null;
+        }
+
         CourtResponseDto courtResponseDto = new CourtResponseDto();
         courtResponseDto.setId(court.getId());
         courtResponseDto.setCourtNumber(court.getCourtNumber());
@@ -73,7 +61,7 @@ public class Mapper {
         return courtResponseDto;
     }
 
-//    -------------- reservations
+//    -------------- reservation
 
     public Reservation mapToEntity(ReservationRequestDto reservationRequestDto) {
         Reservation reservation = new Reservation();
@@ -87,7 +75,6 @@ public class Mapper {
 
         reservation.setGameType(GameType.valueOf(reservationRequestDto.getGameType()));
         reservation.setCustomer(mapToEntity(reservationRequestDto.getCustomer()));
-        // court
 
         return reservation;
     }
@@ -99,15 +86,13 @@ public class Mapper {
         reservationDto.setReservationStart(reservation.getReservationStart().toString());
         reservationDto.setReservationEnd(reservation.getReservationEnd().toString());
         reservationDto.setTotalPrice(reservation.getTotalPrice());
-        if (reservation.getCourt() != null) {
-            reservationDto.setCourt(mapToDto(reservation.getCourt()));
-        }
+        reservationDto.setCourt(mapToDto(reservation.getCourt()));
         reservationDto.setCustomer(mapToDto(reservation.getCustomer()));
 
         return reservationDto;
     }
 
-//    -------------- customers
+//    -------------- customer
 
     public Customer mapToEntity(CustomerDto customerDto) {
         Customer customer = new Customer();

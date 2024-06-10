@@ -2,13 +2,11 @@ package com.example.inqool_task.service;
 
 import com.example.inqool_task.data.model.Court;
 import com.example.inqool_task.data.model.CourtSurface;
-//import com.example.inqool_task.exceptions.EntityNotFoundException;
 import com.example.inqool_task.exceptions.EntityNotFoundException;
 import com.example.inqool_task.repository.CrudRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -32,19 +30,14 @@ public class CourtSurfaceService {
             throw new IllegalArgumentException("Surface already exists");
         }
 
-        CourtSurface createdSurface = crudRepository.create(surface);
-
-        if (createdSurface == null) {
-            System.out.println("FAIL CREATE SURFACE");
-        }
-
-        return createdSurface;
+        return crudRepository.create(surface);
     }
 
     public CourtSurface getById(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("Provided id must not be null");
         }
+
         List<CourtSurface> surfaces = crudRepository.findByNamedQuery(
                 CourtSurface.FIND_BY_ID_QUERY, CourtSurface.class,
                 Collections.singletonMap("id", id)
@@ -52,6 +45,7 @@ public class CourtSurfaceService {
         if (surfaces.isEmpty()) {
             throw new EntityNotFoundException("Court surface", id);
         }
+
         return surfaces.get(0);
     }
 
@@ -60,11 +54,8 @@ public class CourtSurfaceService {
     }
 
     public CourtSurface update(CourtSurface surfaceToUpdate) {
-        CourtSurface updatedSurface = crudRepository.update(surfaceToUpdate);
-        if (updatedSurface == null) {
-            System.out.println("ERROR");
-        }
-        return updatedSurface;
+        getById(surfaceToUpdate.getId());
+        return crudRepository.update(surfaceToUpdate);
     }
 
     public void delete(Long id) {
@@ -76,6 +67,6 @@ public class CourtSurfaceService {
         }
         surfaceToDelete.setCourts(updatedCourts);
         surfaceToDelete.setDeleted(true);
-        update(surfaceToDelete);
+        crudRepository.update(surfaceToDelete);
     }
 }

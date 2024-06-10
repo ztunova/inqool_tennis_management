@@ -1,6 +1,5 @@
 package com.example.inqool_task.data.dto;
 
-import com.example.inqool_task.data.model.GameType;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;

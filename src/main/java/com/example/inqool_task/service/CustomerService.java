@@ -51,12 +51,6 @@ public class CustomerService {
     }
 
     private Customer createCustomer(Customer customer) {
-        Customer createdCustomer = crudRepository.create(customer);
-
-        if (createdCustomer == null) {
-            System.out.println("FAIL CREATE Customer");
-        }
-
-        return createdCustomer;
+        return crudRepository.create(customer);
     }
 }

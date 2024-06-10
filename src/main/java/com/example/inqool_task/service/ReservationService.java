@@ -11,11 +11,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,17 +33,10 @@ public class ReservationService {
     }
 
     public Reservation create(Reservation reservation, Long courtId) {
-        checkOverlappingReservations(null, courtId, reservation.getReservationStart(), reservation.getReservationEnd());
-
+        checkOverlappingReservations(null, courtId,
+                reservation.getReservationStart(), reservation.getReservationEnd());
         setUpReservation(courtId, reservation);
-
-        Reservation createdReservation = crudRepository.create(reservation);
-        if (createdReservation == null) {
-            System.out.println("FAIL CREATE RESERVATION");
-        }
-
-//        createdReservation.calculateTotalPrice();
-        return createdReservation;
+        return crudRepository.create(reservation);
     }
 
     public Reservation getById(Long id) {
@@ -61,9 +52,7 @@ public class ReservationService {
             throw new EntityNotFoundException("Reservation", id);
         }
 
-        Reservation result = reservations.get(0);
- //       result.calculateTotalPrice();
-        return result;
+        return reservations.get(0);
     }
 
     public List<Reservation> getAll() {
@@ -79,19 +68,11 @@ public class ReservationService {
         List<Reservation> courtsReservations = courtOpt.get().getReservations()
                 .stream()
                 .filter(r -> !r.isDeleted())
+                // order reservations from newest to oldest by created at field
                 .sorted(((o1, o2) -> o2.getCreatedAt().compareTo(o1.getCreatedAt())))
                 .toList();
+        courtsReservations.forEach(Reservation::calculateTotalPrice);
 
-        // order reservations from newest to oldest by created at field
-//        Comparator<Reservation> compareByDateCreated = new Comparator<Reservation>() {
-//            @Override
-//            public int compare(Reservation o1, Reservation o2) {
-//                return o2.getCreatedAt().compareTo(o1.getCreatedAt());
-//            }
-//        };
-//        TreeSet<Reservation> orderedReservations = new TreeSet<>(compareByDateCreated);
-//        orderedReservations.addAll(courtsReservations);
-//        return orderedReservations.stream().toList();
         return courtsReservations;
     }
 
@@ -126,12 +107,7 @@ public class ReservationService {
         setUpReservation(courtId, reservationUpdate);
         reservationUpdate.setCreatedAt(reservationDb.getCreatedAt());
 
-        Reservation updated = crudRepository.update(reservationUpdate);
-        if (updated == null) {
-            System.out.println("RES UPDATE FAIL");
-        }
-
-        return updated;
+        return crudRepository.update(reservationUpdate);
     }
 
     public void delete(Long id) {
@@ -148,7 +124,7 @@ public class ReservationService {
         customer.addReservation(reservationUpdate);
         reservationUpdate.setCourt(court);
         court.addReservation(reservationUpdate);
-        reservationUpdate.calculateTotalPrice();
+        // reservationUpdate.calculateTotalPrice();
     }
 
     private void checkOverlappingReservations(Long reservationId, Long courtId, LocalDateTime startTime, LocalDateTime endTime) {
@@ -156,7 +132,8 @@ public class ReservationService {
         List<Long> overlappingReservationIds = crudRepository.findOverlappingReservations(
                 reservationIdQuery, startTime, endTime, courtId);
         if (!overlappingReservationIds.isEmpty()) {
-            throw new IllegalArgumentException("Reservation overlapping with folowing reservations: " + overlappingReservationIds);
+            throw new IllegalArgumentException("Reservation overlapping with following reservations: "
+                    + overlappingReservationIds);
         }
     }
 

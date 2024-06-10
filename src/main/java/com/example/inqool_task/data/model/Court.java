@@ -15,8 +15,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Loader;
-import org.hibernate.annotations.Where;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -27,7 +25,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "COURTS")
-//@Where(clause = "deleted = false")
 @NamedQuery(name = Court.FIND_ALL_QUERY, query = "select c from Court c where c.deleted = false")
 @NamedQuery(name = Court.FIND_BY_ID_QUERY, query = "select c from Court c where c.id = :id and c.deleted = false")
 @NamedQuery(name = Court.FIND_BY_COURT_NUMBER, query = "select c from Court c where c.courtNumber = :courtNumber and c.deleted = false")
@@ -42,7 +39,7 @@ public class Court {
     @Column(name = "court_id")
     private Long id;
 
-    @Column(name = "court_number", nullable = false, unique = true)
+    @Column(name = "court_number", nullable = false)
     private Long courtNumber;
 
     @ManyToOne

@@ -1,6 +1,5 @@
 package com.example.inqool_task.repository;
 
-//import com.example.inqool_task.HibernateUtil;
 import com.example.inqool_task.data.Persistence;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -38,33 +37,6 @@ public class CrudRepository {
             em.close();
         }
     }
-
-    public <R> R getById(Long id, Class<R> clazz) {
-        if (id == null || clazz == null) {
-            return null;
-        }
-        EntityManager em = Persistence.getEntityManager();
-        try {
-            return em.find(clazz, id);
-        } catch (Exception e) {
-            log.error("Could not find any entity '" + clazz.getSimpleName() + "' with id '" + id + "'. " + e.getMessage(), e);
-            return null;
-        } finally {
-            em.close();
-        }
-    }
-
-//    public <R> List<R> criteriaFindAll(Class<R> clazz) {
-//        EntityManager em = Persistence.getEntityManager();
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<R> query = cb.createQuery(clazz);
-//
-//        //TODO under this line create a Root<Product> instance and then use .select() method on this instance
-//        Root<R> personRoot = query.from(clazz);
-//        query.select(personRoot).where(cb.equal(personRoot.get(clazz.), "John Doe"));
-//
-//        return em.createQuery(query).getResultList();
-//    }
 
     public <R> R update(R entity) {
         if (entity == null) {

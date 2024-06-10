@@ -21,7 +21,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table
+@Table(name = "CUSTOMERS")
 @NamedQuery(name = Customer.FIND_BY_PHONE_NUMBER, query = "select c from Customer c where c.phoneNumber = :phoneNumber")
 public class Customer {
     public static final String FIND_BY_PHONE_NUMBER = "Customer.findByPhoneNumber";

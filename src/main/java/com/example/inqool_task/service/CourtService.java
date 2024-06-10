@@ -36,13 +36,8 @@ public class CourtService {
         CourtSurface surface = surfaceService.getById(surfaceId);
         court.setSurface(surface);
         surface.addCourt(court);
-        Court createdCourt = crudRepository.create(court);
 
-        if (createdCourt == null) {
-            System.out.println("FAIL CREATE SURFACE");
-        }
-
-        return createdCourt;
+        return crudRepository.create(court);
     }
 
     public Optional<Court> getCourtByNumber(Long courtNumber) {
@@ -63,6 +58,7 @@ public class CourtService {
         if (id == null) {
             throw new IllegalArgumentException("Provided id must not be null");
         }
+
         List<Court> courts = crudRepository.findByNamedQuery(
                 Court.FIND_BY_ID_QUERY, Court.class,
                 Collections.singletonMap("id", id)
@@ -70,6 +66,7 @@ public class CourtService {
         if (courts.isEmpty()) {
             throw new EntityNotFoundException("Court", id);
         }
+
         return courts.get(0);
     }
 
@@ -78,15 +75,12 @@ public class CourtService {
     }
 
     public Court update(Long surfaceId, Court courtToUpdate) {
+        Court courtDb = getById(courtToUpdate.getId());
         if (surfaceId != null) {
             CourtSurface surface = surfaceService.getById(surfaceId);
             courtToUpdate.setSurface(surface);
         }
-        Court updatedCourt = crudRepository.update(courtToUpdate);
-        if (updatedCourt == null) {
-            System.out.println("ERROR");
-        }
-        return updatedCourt;
+        return crudRepository.update(courtToUpdate);
     }
 
     public void delete(Long id) {
@@ -99,7 +93,6 @@ public class CourtService {
         }
         courtToDelete.setReservations(updatedReservations);
         courtToDelete.setDeleted(true);
-        // update(courtToDelete);
         crudRepository.update(courtToDelete);
     }
 

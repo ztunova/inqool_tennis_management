@@ -28,15 +28,13 @@ import java.time.temporal.ChronoUnit;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table
+@Table(name = "RESERVATIONS")
 @NamedQuery(name = Reservation.FIND_ALL_QUERY, query = "select r from Reservation r where r.deleted = false")
 @NamedQuery(name = Reservation.FIND_BY_ID_QUERY, query = "select r from Reservation r where r.id = :id and r.deleted = false")
-//@NamedQuery(name = Court.FIND_BY_COURT_NUMBER, query = "select c from Court c where c.courtNumber = :courtNumber and c.deleted = false")
 public class Reservation {
 
     public static final String FIND_ALL_QUERY = "Reservation.findAll";
     public static final String FIND_BY_ID_QUERY = "Reservation.findReservationById";
- //   public static final String FIND_BY_COURT_NUMBER = "Court.findCourtByNumber";
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -63,16 +61,22 @@ public class Reservation {
 
     private boolean deleted = false;
 
- //   @Transient
+    @Transient
     private double totalPrice;
 
     @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
 
-//    @PostLoad
-//    @PostPersist
+    @PostPersist
+    @PostLoad
     public void calculateTotalPrice() {
+        if (this.court == null || this.court.getSurface() == null) {
+            this.totalPrice = 0;
+            return;
+        }
+
         long diff = ChronoUnit.MINUTES.between(reservationStart, reservationEnd);
         double rentalPrice = diff * this.court.getSurface().getPricePerMinute();
         this.totalPrice = rentalPrice * gameType.getCharge();
